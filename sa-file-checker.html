@@ -1,0 +1,132 @@
+<html>
+<head>
+  <title>StackAdapt Display File Checker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    #fileInput {
+      margin: 0 auto;
+    }
+
+    #resultsTable {
+      margin: 20 auto;
+      border-collapse: collapse;
+      width: 80%;
+    }
+
+    #resultsTable th,
+    #resultsTable td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #resultsTable tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    #resultsTable tr:hover {
+      background-color: #ddd;
+    }
+
+    #resultsTable th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #00A7E1;
+      color: white;
+    }
+
+    @media only screen and (max-width: 600px) {
+      #resultsTable {
+        width: 100%;
+      }
+    }
+  </style>
+  <script>
+    function getImageDimensions() {
+      var fileInput = document.getElementById("fileInput");
+      var files = fileInput.files;
+      var table = document.getElementById("resultsTable");
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var reader = new FileReader();
+        reader.onload = (function(file) {
+          return function(e) {
+            var image = new Image();
+            image.onload = function() {
+              var dimensionTestResult = "";
+              if (this.width == 320 && this.height == 50) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 728 && this.height == 90) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 160 && this.height == 600) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 300 && this.height == 250) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 300 && this.height == 600) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 970 && this.height == 250) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 320 && this.height == 480) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 480 && this.height == 320) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 768 && this.height == 1024) {
+                dimensionTestResult = "PASS";
+              } else if (this.width == 1024 && this.height == 768) {
+                dimensionTestResult = "PASS";
+              } else {
+                dimensionTestResult = "FAIL";
+              }
+              var fileSizeTestResult = "";
+              var fileSizeInKB = file.size / 1024;
+              if (fileSizeInKB < 3500) {
+                fileSizeTestResult = "PASS";
+              } else {
+                fileSizeTestResult = "FAIL";
+              }
+              var row = table.insertRow(-1);
+              var cell1 = row.insertCell(0);
+              var cell2 = row.insertCell(1);
+              var cell3 = row.insertCell(2);
+              var cell4 = row.insertCell(3);
+              var cell5 = row.insertCell(4);
+              var cell6 = row.insertCell(5);
+              cell1.innerHTML = file.name;
+              cell2.innerHTML = fileSizeInKB.toFixed(2) + " KB";
+              cell3.innerHTML = fileSizeTestResult;
+              cell4.innerHTML = this.width + "x" + this.height;
+              cell5.innerHTML = dimensionTestResult;
+              if (fileSizeTestResult === "PASS" && dimensionTestResult === "PASS") {
+                cell6.innerHTML = "✅";
+              } else {
+                cell6.innerHTML = "❌";
+              }
+            };
+            image.src = e.target.result;
+          };
+        })(file);
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>LFA - StackAdapt Display File Checker</h1>
+  <input type="file" id="fileInput" multiple />
+  <button onclick="getImageDimensions()">Test Files</button>
+  <table id="resultsTable">
+    <tr>
+      <th>File Name</th>
+      <th>File Size</th>
+      <th>File Size Test</th>
+      <th>Image Dimensions</th>
+      <th>Dimension Test</th>
+      <th>Ready for Traffic</th>
+    </tr>
+  </table>
+</body>
+</html>
