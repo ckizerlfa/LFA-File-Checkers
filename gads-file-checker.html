@@ -1,5 +1,6 @@
 <html>
 <head>
+  <!-- 23.02.22_0219PM -->
   <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -54,6 +55,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </style>
   <script>
     function getImageDimensions() {
+        window.dataLayer = window.dataLayer || [],
+        window.dataLayer.push({
+          'event': 'testRan'
+      });          
       var fileInput = document.getElementById("fileInput");
       var files = fileInput.files;
       var table = document.getElementById("resultsTable");
@@ -108,6 +113,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               } else {
                 cell6.innerHTML = "❌";
               }
+              window.dataLayer = window.dataLayer || [],
+              window.dataLayer.push({
+                'event': 'fileTested',
+                'testedFileName': file.name,
+                'testedFileSize': fileSizeInKB.toFixed(2) + " KB",
+                'testedFileDimensions': this.width + "x" + this.height
+              });
             };
             image.src = e.target.result;
           };
