@@ -118,7 +118,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 'event': 'fileTested',
                 'testedFileName': file.name,
                 'testedFileSize': fileSizeInKB.toFixed(2) + " KB",
-                'testedFileDimensions': this.width + "x" + this.height
+                'testedFileDimensions': this.width + "x" + this.height,
+                'testedFileSizeTestResults': fileSizeTestResult,
+                'testedFileDimensionTestResults': dimensionTestResult
               });
             };
             image.src = e.target.result;
