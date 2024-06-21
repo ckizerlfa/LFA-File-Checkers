@@ -2,12 +2,12 @@
 <head>
   <!-- 23.02.22_0219PM -->
   <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TCRFSZF');</script>
-<!-- End Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TCRFSZF');</script>
+  <!-- End Google Tag Manager -->
   <title>Google Standard Display File Checker</title>
   <style>
     body {
@@ -15,8 +15,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       text-align: center;
     }
 
-    #fileInput {
+    #fileInput, #dropZone {
       margin: 0 auto;
+      border: 2px dashed #ddd;
+      padding: 20px;
+      width: 80%;
+      cursor: pointer;
+    }
+
+    #dropZone.hover {
+      border-color: #aaa;
     }
 
     #resultsTable {
@@ -54,11 +62,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
   </style>
   <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      let dropZone = document.getElementById('dropZone');
+      let fileInput = document.getElementById('fileInput');
+
+      dropZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        dropZone.classList.add('hover');
+      });
+
+      dropZone.addEventListener('dragleave', function(e) {
+        dropZone.classList.remove('hover');
+      });
+
+      dropZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        dropZone.classList.remove('hover');
+        let files = e.dataTransfer.files;
+        fileInput.files = files;
+        getImageDimensions();
+      });
+
+      dropZone.addEventListener('click', function(e) {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', getImageDimensions);
+    });
+
     function getImageDimensions() {
-        window.dataLayer = window.dataLayer || [],
-        window.dataLayer.push({
-          'event': 'testRan'
-      });          
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        'event': 'testRan'
+      });
       var fileInput = document.getElementById("fileInput");
       var files = fileInput.files;
       var table = document.getElementById("resultsTable");
@@ -86,6 +122,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 dimensionTestResult = "PASS";
               } else if (this.width == 970 && this.height == 250) {
                 dimensionTestResult = "PASS";
+              } else if (this.width == 300 && this.height == 60) {
+                dimensionTestResult = "PASS - <span style='color:red;'>YT Companion Only</span>";
               } else {
                 dimensionTestResult = "FAIL";
               }
@@ -108,12 +146,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               cell3.innerHTML = fileSizeTestResult;
               cell4.innerHTML = this.width + "x" + this.height;
               cell5.innerHTML = dimensionTestResult;
-              if (fileSizeTestResult === "PASS" && dimensionTestResult === "PASS") {
+              if (fileSizeTestResult === "PASS" && (dimensionTestResult === "PASS" || dimensionTestResult === "PASS - <span style='color:red;'>YT Companion Only</span>")) {
                 cell6.innerHTML = "✅";
               } else {
                 cell6.innerHTML = "❌";
               }
-              window.dataLayer = window.dataLayer || [],
+              window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
                 'event': 'fileTested',
                 'testedFileName': file.name,
@@ -133,12 +171,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TCRFSZF"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TCRFSZF"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
   <h1>LFA - Google Standard Display File Checker</h1>
-  <input type="file" id="fileInput" multiple />
-  <button onclick="getImageDimensions()">Test Files</button>
+  <input type="file" id="fileInput" multiple style="display:none;" />
+  <div id="dropZone">Drag & Drop Files Here or Click to Select</div>
   <table id="resultsTable">
     <tr>
       <th>File Name</th>
